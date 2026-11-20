@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JARVIS</title>
+  <style>
+    body {
+      margin: 0;
+      background: #07111f;
+      color: #e0f4ff;
+      font: 18px system-ui, sans-serif;
+      text-align: center;
+    }
+    main { max-width: 420px; margin: auto; padding: 48px 20px; }
+    h1 { color: #6ee7ff; letter-spacing: .25em; }
+    button {
+      margin: 6px;
+      padding: 12px 18px;
+      border: 1px solid #26bde2;
+      border-radius: 10px;
+      background: #122c43;
+      color: #e0f4ff;
+      font: inherit;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>JARVIS</h1>
+    <p id="status" role="status">Tap Listen and speak in English.</p>
+    <button onclick="run('listen')">Listen</button>
+    <button onclick="run('speak', 'Hello, sir. How can I help?')">
+      Test Voice
+    </button>
+    <button onclick="run('openSettings')">Settings</button>
+    <button onclick="run('openBrowser')">Browser</button>
+  </main>
+  <script>
+    const statusLine = document.getElementById('status');
+
+    function run(action, message) {
+      if (!window.Android) {
+        statusLine.textContent = 'Open JARVIS in the Android app.';
+        return;
+      }
+      if (action === 'speak') {
+        window.Android.speak(message);
+      } else {
+        window.Android[action]();
+      }
+    }
+
+    window.onSpeech = function (text) {
+      if (text === 'Speech recognition is unavailable on this device.') {
+        statusLine.textContent = text;
+        return;
+      }
+
+      statusLine.textContent = 'Heard: ' + text;
+     
